@@ -25,31 +25,74 @@
         <input type="text"><br/>
     </div>
     <script>
-        var len = 0;
-        document.addEventListener('keyup', function (event) {
-            if (event.keyCode === 13) {
-                var el = document.querySelector('.list').children, elList = [];
+        //原来的写法
+        // var len = 0;
+        // document.addEventListener('keyup', function (event) {
+        //     if (event.keyCode === 13) {
+        //         var el = document.querySelector('.list').children, elList = [];
+        //         //筛选正确子节点
+        //         for (var i = 0; i < el.length; i++) {
+        //             if (el[i].nodeName.toLowerCase() == 'input') {
+        //                 elList.push(el[i])
+        //             }
+        //         }
+        //         //判断当前获取焦点的节点
+        //         for (var i = 0; i < elList.length; i++) {
+        //             if (elList[i] == document.activeElement) {
+        //                 len = i;
+        //                 break;
+        //             }
+        //         }
+        //         if (len >= elList.length - 1) {
+        //             len = 0;
+        //         } else {
+        //             len++;
+        //         }
+        //         elList[len].focus();
+        //     }
+        // })
+
+        function enterFocus(keyCode, dom, nodeName) {
+            this.keyCode = keyCode;
+            this.dom = dom;
+            this.nodeName = nodeName;
+            this.len = 0;
+            this.getChild = function (dom) {
                 //筛选正确子节点
-                for (var i = 0; i < el.length; i++) {
-                    if (el[i].nodeName.toLowerCase() == 'input') {
-                        elList.push(el[i])
+                var elList = [];
+                for (var i = 0; i < dom.length; i++) {
+                    if (dom[i].nodeName.toLowerCase() == this.nodeName) {
+                        elList.push(dom[i])
                     }
                 }
-                //判断当前获取焦点的节点
-                for (var i = 0; i < elList.length; i++) {
-                    if (elList[i] == document.activeElement) {
-                        len = i;
-                        break;
-                    }
-                }
-                if (len >= elList.length - 1) {
-                    len = 0;
-                } else {
-                    len++;
-                }
-                elList[len].focus();
+                return elList
             }
-        })
+        }
+        enterFocus.prototype.getEnterFocus = function () {
+            var _this = this;
+            document.addEventListener('keyup', function (event) {
+                console.log(_this.keyCode)
+                if (event.keyCode === _this.keyCode) {
+                    var el = document.querySelector(_this.dom).children, domList = _this.getChild(el);
+                    //判断当前获取焦点的节点
+                    for (var i = 0; i < domList.length; i++) {
+                        if (domList[i] == document.activeElement) {
+                            _this.len = i;
+                            break;
+                        }
+                    }
+                    if (_this.len >= domList.length - 1) {
+                        _this.len = 0;
+                    } else {
+                        _this.len++;
+                    }
+                    domList[_this.len].focus();
+                }
+            })
+        }
+        
+        var el = new enterFocus(13, '.list', 'input');
+        el.getEnterFocus();
     </script>
 </body>
 
