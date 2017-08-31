@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="list">
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+        <input type="text"><br/>
+    </div>
+    <script>
+        var len = 0;
+        document.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                var el = document.querySelector('.list').children, elList = [];
+                //筛选正确子节点
+                for (var i = 0; i < el.length; i++) {
+                    if (el[i].nodeName.toLowerCase() == 'input') {
+                        elList.push(el[i])
+                    }
+                }
+                //判断当前获取焦点的节点
+                for (var i = 0; i < elList.length; i++) {
+                    if (elList[i] == document.activeElement) {
+                        len = i;
+                        break;
+                    }
+                }
+                if (len >= elList.length - 1) {
+                    len = 0;
+                } else {
+                    len++;
+                }
+                elList[len].focus();
+            }
+        })
+    </script>
+</body>
+
+</html>
